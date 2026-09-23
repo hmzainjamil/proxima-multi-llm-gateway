@@ -1,5 +1,9 @@
 # proxima-multi-llm-gateway
 
+<!-- HMZ PORTFOLIO STANDARD -->
+> Portfolio status: active · Visibility: public · Source of truth: current repository source.
+<!-- END HMZ PORTFOLIO STANDARD -->
+
 <!-- HMZ PORTFOLIO CONTEXT START -->
 <p align="center"><a href="https://github.com/hmzainjamil/proxima-multi-llm-gateway">Repository</a> · <a href="https://github.com/hmzainjamil/proxima-multi-llm-gateway/issues">Issues</a> · <a href="https://github.com/hmzainjamil/proxima-multi-llm-gateway/commits/main">Commits</a></p>
 <p align="center"><img alt="Last commit" src="https://img.shields.io/github/last-commit/hmzainjamil/proxima-multi-llm-gateway.svg"> <img alt="Repository size" src="https://img.shields.io/github/repo-size/hmzainjamil/proxima-multi-llm-gateway.svg"> <img alt="Visibility" src="https://img.shields.io/badge/visibility-public-blue"> <img alt="Status" src="https://img.shields.io/badge/status-active-success"></p>
