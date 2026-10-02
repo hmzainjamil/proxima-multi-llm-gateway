@@ -17,7 +17,7 @@ The repository is a local Electron Agent Hub paired with an MCP stdio bridge. Th
 
 ## Documentation gaps
 
-The repository currently has no dedicated security/data-flow guide, supported-runtime matrix, provider compatibility matrix, user guide, release procedure, or vulnerability reporting instructions. Do not infer these policies from the presence of source files or CI workflows. Add them when maintainers can provide accurate content and ownership.
+[Security and data handling](../SECURITY.md) documents provider/session boundaries and review cautions. A supported-runtime matrix, provider compatibility matrix, user guide, release procedure, and vulnerability reporting instructions are not currently present. Do not infer these policies from the presence of source files or CI workflows. Add them when maintainers can provide accurate content and ownership.
 
 ## Verification boundary
 
