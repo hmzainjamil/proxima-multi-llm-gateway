@@ -1,157 +1,66 @@
-# proxima-multi-llm-gateway
+# Proxima Desktop Agent Hub and MCP Bridge
 
-> **One API. Every LLM. Zero lock-in.** — OpenAI-compatible gateway that routes a single request across Ollama, Groq, DeepSeek, Gemini, Kimi, Nemotron, GPT-4o, and Claude with automatic fallback, cost capping, and per-key rate limiting.
+> An Electron desktop app paired with a local Model Context Protocol server. The MCP process bridges coding tools to the desktop Agent Hub over loopback IPC.
 
-<p align="center"><a href="https://github.com/hmzainjamil/proxima-multi-llm-gateway">Repository</a> · <a href="https://github.com/hmzainjamil/proxima-multi-llm-gateway/commits/main">Commits</a> · <a href="https://github.com/hmzainjamil/proxima-multi-llm-gateway/issues">Issues</a></p>
-<p align="center"><img alt="Documentation" src="https://img.shields.io/badge/documentation-deep%20editorial-lightgrey"> <img alt="Lifecycle" src="https://img.shields.io/badge/lifecycle-active-success"></p>
+**Status:** Source repository inspected; desktop startup, builds, provider compatibility, and end-to-end tool calls were not verified in this documentation update.
 
-<!-- HMZ DEEP README v1 -->
+The repository name says multi-LLM gateway, while its package metadata describes a local MCP server and its source contains Electron provider engines plus a loopback bridge. This README documents the checked-in implementation footprint, not a hosted OpenAI-compatible API, provider fallback service, or production gateway.
 
-## At a glance
+## What is included
 
-| Field | Current state |
-|---|---|
-| Repository | proxima-multi-llm-gateway |
-| Visibility | Public |
-| Lifecycle | Active |
-| Evidence basis | Current repository documentation and source-visible material |
-
-## Why this exists
-
-**One API. Every LLM. Zero lock-in.** — OpenAI-compatible gateway that routes a single request across Ollama, Groq, DeepSeek, Gemini, Kimi, Nemotron, GPT-4o, and Claude with automatic fallback, cost capping, and per-key rate limiting.
-
-The gateway documentation is organized around routing, provider abstraction, fallback behavior, limits, and operator control. Benchmark and cost claims are treated as evidence requirements rather than marketing copy.
-
-## 🧠 CONCEPTS
-| Concept | Location | Description |
+| Part | Path | Verified from source tree |
 |---|---|---|
-| **Funding** | `.github/FUNDING.yml` | Module — part of the proxima-multi-llm-gateway runtime · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/.github/FUNDING.yml) |
-| **Bug Report** | `.github/ISSUE_TEMPLATE/bug_report.md` | Reference doc — spec for the corresponding module · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/.github/ISSUE_TEMPLATE/bug_report.md) |
-| **Config** | `.github/ISSUE_TEMPLATE/config.yml` | Module — part of the proxima-multi-llm-gateway runtime · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/.github/ISSUE_TEMPLATE/config.yml) |
-| **Feature Request** | `.github/ISSUE_TEMPLATE/feature_request.md` | Reference doc — spec for the corresponding module · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/.github/ISSUE_TEMPLATE/feature_request.md) |
-| **Dependabot** | `.github/dependabot.yml` | Module — part of the proxima-multi-llm-gateway runtime · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/.github/dependabot.yml) |
-| **Package** | `electron/package.json` | Config schema — validated at startup · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/electron/package.json) |
-| **Package Lock** | `package-lock.json` | Config schema — validated at startup · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/package-lock.json) |
-| **Package** | `package.json` | Config schema — validated at startup · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/package.json) |
-| **Proxima** | `sdk/proxima.js` | Module — part of the proxima-multi-llm-gateway runtime · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/sdk/proxima.js) |
-| **Enabled Providers.Example** | `src/enabled-providers.example.json` | Config schema — validated at startup · [Source](https://github.com/hmzainjamil/proxima-multi-llm-gateway/blob/main/src/enabled-providers.example.json) |
+| Electron desktop app | `electron/` | Main process, UI, IPC/WebSocket bridge, and provider engine files |
+| MCP stdio server | `src/mcp-server-v3.js` | MCP server connects to `127.0.0.1`; default IPC port is `19222`, override with `AGENT_HUB_PORT` |
+| CLI | `cli/proxima-cli.cjs` | Entry file exists; behavior not tested |
+| JavaScript and Python SDK files | `sdk/` | Source files exist; package compatibility not tested |
+| Provider engines | `electron/providers/` | Files exist for ChatGPT, Claude, Gemini, and Perplexity |
 
-## ⚙️ HOW IT WORKS
+The provider engine files and their presence do not establish current provider compatibility or support guarantees.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│ Input:  prompt, file, or webhook                        │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│ Layer 1 — Detect & route                                │
-│  Read intent, pick model tier, load matching skills     │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│ Layer 2 — Parallel gather                               │
-│  Sub-agents fire on Tier 0 (Groq, Ollama, DeepSeek)     │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│ Layer 3 — Synthesize                                    │
-│  Opus sub-agent reconciles, dedupes, ranks              │
-└─────────────────────────┬───────────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────────┐
-│ Output: structured artifact + audit trail               │
-└─────────────────────────────────────────────────────────┘
+## Local start
+
+Requires a compatible Node.js/npm installation. Exact supported versions are not declared in the checked package metadata.
+
+```sh
+npm install
+npm start
 ```
 
-## 🚀 INSTALL
+The root package defines `start` as `electron .`. This command was not run here.
 
-```bash
-# Clone
-git clone https://github.com/hmzainjamil/proxima-multi-llm-gateway.git
-cd proxima-multi-llm-gateway
+To start the MCP server:
 
-# Install
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-# Configure
-cp .env.example .env
-# fill in keys
-
-# Verify
-bash scripts/healthcheck.sh
+```sh
+npm run mcp
 ```
 
-## 📟 USAGE
+The MCP server uses stdio and expects the desktop Agent Hub to be reachable on loopback at port `19222` by default. These commands are documented by package scripts and source code, not runtime-validated.
 
-## ⚙️ CONFIGURATION
+## Configuration and data flow
 
-| Option | Default | Description |
-|---|---|---|
-| `MODEL_TIER` | `tier0` | Primary model tier — tier0=free, tier1=Haiku, tier2=Sonnet/Opus |
-| `MAX_TOKENS` | `4096` | Per-call token budget cap |
-| `PARALLEL` | `4` | Number of concurrent sub-agents |
-| `CACHE_TTL` | `3600` | Prompt-cache TTL in seconds |
-| `AUDIT_DIR` | `~/.claude/audit` | Where the JSONL audit trail lives |
-| `FALLBACK_CHAIN` | `ollama,groq,deepseek,gemini` | Ordered fallback list |
-| `TIMEOUT` | `60` | Hard kill any single call after N seconds |
-| `RETRY_MAX` | `2` | How many times to retry on 5xx |
-| `LOG_LEVEL` | `info` | debug|info|warn|error |
-| `TELEMETRY` | `off` | off|local|posthog |
+- The MCP bridge can use `AGENT_HUB_PORT` to select its local IPC port.
+- Provider engines run through Electron browser views. Requests may be sent to the corresponding third-party provider using the user's session.
+- This repository does not establish that prompts stay on-device or that provider accounts handle data in a particular way.
+- Do not send sensitive prompts or connect accounts until you review the source, provider terms, and current data flow.
+- Keep browser sessions, credentials, and tokens out of logs, issue reports, and version control.
 
-## 🧪 TESTING
+## Claims and limits
 
-```bash
-# Run all tests
-make test
+Earlier README language described an OpenAI-compatible multi-provider gateway with automatic fallback, cost caps, and per-key rate limits. Those claims were not supported by the package metadata and source paths inspected for this update, so they are not repeated as verified capabilities.
 
-# Coverage
-make coverage
+No provider integration test, benchmark, privacy review, security audit, release build, or production deployment was run or established here.
 
-# Single test
-pytest tests/test_router.py::test_fallback
+## Documentation
 
-# E2E
-make e2e
-```
+- [Documentation and control index](docs/README.md)
+- [MCP server source](src/mcp-server-v3.js)
+- [Electron application](electron/)
+- [Provider engines](electron/providers/)
+- [Personal Use License](LICENSE)
 
-| Test suite | Coverage | Runtime |
-|---|---|---|
-| Unit | 91% | 4.2s |
-| Integration | 78% | 18s |
-| E2E | 62% | 92s |
-| Total | 84% | ~2 min |
+- [Security and data handling](SECURITY.md)
 
-## 🔐 SECURITY
+## License
 
-- Never commit `.env` or API keys
-- Use least-privilege scopes (read-only when possible)
-- Rotate tokens monthly
-- Audit MCP tool permissions before granting
-
-```bash
-# Scan for accidentally committed secrets
-git diff --staged | grep -iE "key|secret|token|password"
-```
-
-Report vulnerabilities → security@hmzainjamil.com
-
-## Limitations
-
-- Provider availability, pricing, model names, and limits can change.
-- Cross-provider output quality is not assumed to be equivalent.
-- Performance claims require a controlled benchmark with fixed workload and hardware.
-
-## 🔗 RELATED
-
-| Repo | Why it matters |
-|---|---|
-| [hmz-claude-code-best-practice](https://github.com/hmzainjamil/hmz-claude-code-best-practice) | Master reference for all Claude Code patterns |
-| [open-design](https://github.com/hmzainjamil/open-design) | Sibling project — open-source design loop |
-| [awesome-openrouter](https://github.com/hmzainjamil/awesome-openrouter) | Companion repo in the same stack |
-| [free-ai-tools](https://github.com/hmzainjamil/free-ai-tools) | Companion repo in the same stack |
-| [openclaw](https://github.com/hmzainjamil/openclaw) | Companion repo in the same stack |
-
-## Maintainer
-
-[hmzainjamil](https://github.com/hmzainjamil)
+The checked-in [license](LICENSE) permits personal, non-commercial use only and restricts commercial and enterprise use. Read the license text before using or distributing this software.
