@@ -59,6 +59,8 @@ No provider integration test, benchmark, privacy review, security audit, release
 - [Provider engines](electron/providers/)
 - [Personal Use License](LICENSE)
 
+- [Security and data handling](SECURITY.md)
+
 ## License
 
 The checked-in [license](LICENSE) permits personal, non-commercial use only and restricts commercial and enterprise use. Read the license text before using or distributing this software.
